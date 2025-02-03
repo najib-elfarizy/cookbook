@@ -5,9 +5,6 @@ import { RecipeWithStats } from "@/types/supabase";
 import { useAuth } from "@/lib/AuthContext";
 
 const SavedRecipes = () => {
-  const [recipes, setRecipes] = useState<RecipeWithStats[]>([]);
-
-const SavedRecipes = () => {
   const { user } = useAuth();
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
