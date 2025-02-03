@@ -1,6 +1,7 @@
 import React from "react";
 import RecipeCard from "./RecipeCard";
-
+import { RecipeWithStats } from "@/types/supabase";
+        
 interface Recipe {
   id: string;
   title: string;
@@ -25,7 +26,7 @@ interface Recipe {
 }
 
 interface RecipeGridProps {
-  recipes?: Recipe[];
+  recipes?: RecipeWithStats[];
 }
 
 const RecipeGrid = ({ recipes = [] }: RecipeGridProps) => {

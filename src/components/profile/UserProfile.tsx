@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { RecipeWithStats } from "@/types/supabase";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/AuthContext";
 import { AuthModal } from "@/components/auth/AuthModal";
@@ -15,9 +16,9 @@ const UserProfile = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
-  const [recipes, setRecipes] = useState([]);
-  const [savedRecipes, setSavedRecipes] = useState([]);
-  const [likedRecipes, setLikedRecipes] = useState([]);
+  const [recipes, setRecipes] = useState<RecipeWithStats[]>([]);
+  const [savedRecipes, setSavedRecipes] = useState<RecipeWithStats[]>([]);
+  const [likedRecipes, setLikedRecipes] = useState<RecipeWithStats[]>([]);
 
   useEffect(() => {
     if (!user) return;
@@ -90,7 +91,11 @@ const UserProfile = () => {
                 </div>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" size="icon">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => navigate("/settings")}
+                >
                   <Settings className="h-4 w-4" />
                 </Button>
                 <Button

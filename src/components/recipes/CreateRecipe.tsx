@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Recipe } from "@/types/supabase";
 import { useAuth } from "@/lib/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,9 @@ const CreateRecipe = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
+  type CreateRecipeForm = Omit<Recipe, "id" | "created_at">;
+
+  const [formData, setFormData] = useState<CreateRecipeForm>({
     title: "",
     description: "",
     image_url: "",

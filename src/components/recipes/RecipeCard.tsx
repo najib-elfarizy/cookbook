@@ -23,11 +23,9 @@ import {
   ChefHat,
 } from "lucide-react";
 import { toggleRecipeLike, toggleRecipeSave } from "@/lib/api";
+import { RecipeWithStats } from "@/types/supabase";
 
-interface RecipeCardProps {
-  id?: string;
-  title?: string;
-  image?: string;
+interface RecipeCardProps extends Partial<RecipeWithStats> {
   prepTime?: string;
   cookTime?: string;
   servings?: number;
@@ -37,7 +35,6 @@ interface RecipeCardProps {
   comments?: number;
   isLiked?: boolean;
   isSaved?: boolean;
-  user_id?: string;
   username?: string;
 }
 

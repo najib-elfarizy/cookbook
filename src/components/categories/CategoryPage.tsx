@@ -5,19 +5,7 @@ import RecipeGrid from "../recipes/RecipeGrid";
 import { useEffect, useState } from "react";
 import { getRecipesByCategory } from "@/lib/api";
 
-interface Recipe {
-  id: string;
-  title: string;
-  description: string;
-  image_url: string;
-  prep_time: number;
-  cook_time: number;
-  servings: number;
-  difficulty: string;
-  likes: number;
-  saves: number;
-  comments: number;
-}
+import { RecipeWithStats } from "@/types/supabase";
 
 const CategoryPage = () => {
   const { slug } = useParams();

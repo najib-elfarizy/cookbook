@@ -21,6 +21,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase";
+import { RecipeWithDetails } from "@/types/supabase";
 
 interface Recipe {
   id: string;

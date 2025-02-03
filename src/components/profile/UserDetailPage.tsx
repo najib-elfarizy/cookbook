@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart } from "lucide-react";
 import RecipeGrid from "../recipes/RecipeGrid";
 import { getAllRecipes } from "@/lib/api";
+import { RecipeWithStats } from "@/types/supabase";
 
 interface Recipe {
   id: string;
