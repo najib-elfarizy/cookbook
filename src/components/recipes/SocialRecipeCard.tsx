@@ -15,27 +15,16 @@ import {
   ChefHat,
 } from "lucide-react";
 
-interface Comment {
-  username: string;
-  text: string;
-  avatar: string;
-  timeAgo: string;
-}
+import { RecipeWithStats, RecipeComment } from "@/types/supabase";
 
-interface SocialRecipeCardProps {
+interface SocialRecipeCardProps extends Partial<RecipeWithStats> {
   username?: string;
   userAvatar?: string;
-  title?: string;
-  image?: string;
-  likes?: number;
-  comments?: Comment[];
+  comments?: RecipeComment[];
   timePosted?: string;
-  description?: string;
   isLiked?: boolean;
   isSaved?: boolean;
   cookTime?: string;
-  servings?: number;
-  difficulty?: string;
   onLike?: () => void;
   onSave?: () => void;
 }

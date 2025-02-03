@@ -1,5 +1,6 @@
 import React from "react";
 import BottomNav from "./BottomNav";
+import Navbar from "./Navbar";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -8,7 +9,8 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="min-h-screen pb-16">
-      {children}
+      <Navbar />
+      <main className="pt-2">{children}</main>
       <BottomNav />
     </div>
   );

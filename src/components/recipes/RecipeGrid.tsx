@@ -1,26 +1,10 @@
 import React from "react";
 import RecipeCard from "./RecipeCard";
 
-interface Recipe {
-  id: string;
-  title: string;
-  description: string;
-  image_url: string;
-  prep_time: number;
-  cook_time: number;
-  servings: number;
-  difficulty: string;
-  likes: number;
-  saves: number;
-  comments: number;
-  user_id: string;
-  user?: {
-    username: string;
-  };
-}
+import { RecipeWithStats } from "@/types/supabase";
 
 interface RecipeGridProps {
-  recipes?: Recipe[];
+  recipes?: RecipeWithStats[];
 }
 
 const RecipeGrid = ({ recipes = [] }: RecipeGridProps) => {

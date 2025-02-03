@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import RecipeGrid from "../recipes/RecipeGrid";
 import { getSavedRecipes } from "@/lib/api";
+import { RecipeWithStats } from "@/types/supabase";
 
 const SavedRecipes = () => {
-  const [recipes, setRecipes] = useState([]);
+  const [recipes, setRecipes] = useState<RecipeWithStats[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

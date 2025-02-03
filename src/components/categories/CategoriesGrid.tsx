@@ -4,12 +4,7 @@ import CategoryCard from "./CategoryCard";
 import { useEffect, useState } from "react";
 import { getCategories } from "@/lib/api";
 
-interface Category {
-  id: string;
-  title: string;
-  image_url: string;
-  slug: string;
-}
+import { Category } from "@/types/supabase";
 
 const CategoriesGrid = () => {
   const [categories, setCategories] = useState<Category[]>([]);

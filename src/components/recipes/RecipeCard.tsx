@@ -24,19 +24,12 @@ import {
 } from "lucide-react";
 import { toggleRecipeLike, toggleRecipeSave } from "@/lib/api";
 
-interface RecipeCardProps {
-  id?: string;
-  title?: string;
-  image?: string;
+import { RecipeWithStats } from "@/types/supabase";
+
+interface RecipeCardProps extends Partial<RecipeWithStats> {
   prepTime?: string;
   cookTime?: string;
-  servings?: number;
-  difficulty?: string;
-  likes?: number;
-  saves?: number;
-  comments?: number;
   isSaved?: boolean;
-  user_id?: string;
   username?: string;
 }
 

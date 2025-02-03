@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { RecipeComment } from "@/types/supabase";
 import {
   Dialog,
   DialogContent,
@@ -30,7 +31,7 @@ const CommentsModal = ({
   const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
-  const [comments, setComments] = useState<any[]>([]);
+  const [comments, setComments] = useState<RecipeComment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
 

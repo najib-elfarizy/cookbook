@@ -22,24 +22,7 @@ import { AuthModal } from "@/components/auth/AuthModal";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase";
 
-interface Recipe {
-  id: string;
-  title: string;
-  description: string;
-  image_url: string;
-  prep_time: number;
-  cook_time: number;
-  servings: number;
-  difficulty: string;
-  instructions: Array<{
-    number: number;
-    instruction: string;
-    tip?: string;
-  }>;
-  likes: number;
-  saves: number;
-  comments: any[];
-}
+import { RecipeWithDetails } from "@/types/supabase";
 
 const RecipeDetail = () => {
   const navigate = useNavigate();

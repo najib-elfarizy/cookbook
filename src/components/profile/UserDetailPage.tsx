@@ -6,20 +6,7 @@ import { Heart } from "lucide-react";
 import RecipeGrid from "../recipes/RecipeGrid";
 import { getAllRecipes } from "@/lib/api";
 
-interface Recipe {
-  id: string;
-  title: string;
-  description: string;
-  image_url: string;
-  prep_time: number;
-  cook_time: number;
-  servings: number;
-  difficulty: string;
-  user_id: string;
-  likes: number;
-  saves: number;
-  comments: number;
-}
+import { RecipeWithStats } from "@/types/supabase";
 
 const UserDetailPage = () => {
   const { userId } = useParams();
