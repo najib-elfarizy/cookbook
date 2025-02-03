@@ -5,8 +5,30 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart } from "lucide-react";
 import RecipeGrid from "../recipes/RecipeGrid";
 import { getAllRecipes } from "@/lib/api";
-
 import { RecipeWithStats } from "@/types/supabase";
+
+interface Recipe {
+  id: string;
+  title: string;
+  description: string;
+  image_url: string;
+  prep_time: number;
+  cook_time: number;
+  servings: number;
+  difficulty: string;
+  user_id: string;
+  category: {
+    id: string;
+    title: string;
+    slug: string;
+  };
+  user?: {
+    username: string;
+  };
+  likes: number;
+  saves: number;
+  comments: number;
+}
 
 const UserDetailPage = () => {
   const { userId } = useParams();

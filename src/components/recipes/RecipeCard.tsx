@@ -23,12 +23,17 @@ import {
   ChefHat,
 } from "lucide-react";
 import { toggleRecipeLike, toggleRecipeSave } from "@/lib/api";
-
 import { RecipeWithStats } from "@/types/supabase";
 
 interface RecipeCardProps extends Partial<RecipeWithStats> {
   prepTime?: string;
   cookTime?: string;
+  servings?: number;
+  difficulty?: string;
+  likes?: number;
+  saves?: number;
+  comments?: number;
+  isLiked?: boolean;
   isSaved?: boolean;
   username?: string;
 }
@@ -157,7 +162,6 @@ const RecipeCard = ({
               <Button
                 variant="ghost"
                 size="icon"
-                className="hover:text-red-500"
                 onClick={handleLike}
                 className={liked ? "text-red-500" : ""}
               >

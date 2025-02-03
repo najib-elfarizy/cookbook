@@ -26,7 +26,7 @@ const UserProfile = () => {
     // Fetch user's recipes
     getAllRecipes().then((allRecipes) => {
       const userRecipes = allRecipes.filter(
-        (recipe) => recipe.user_id === user.id,
+        (recipe) => recipe.author_id === user.id,
       );
       setRecipes(userRecipes);
     });

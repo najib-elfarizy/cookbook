@@ -1,7 +1,29 @@
 import React from "react";
 import RecipeCard from "./RecipeCard";
-
 import { RecipeWithStats } from "@/types/supabase";
+        
+interface Recipe {
+  id: string;
+  title: string;
+  description: string;
+  image_url: string;
+  prep_time: number;
+  cook_time: number;
+  servings: number;
+  difficulty: string;
+  user_id: string;
+  category: {
+    id: string;
+    title: string;
+    slug: string;
+  };
+  user?: {
+    username: string;
+  };
+  likes: number;
+  saves: number;
+  comments: number;
+}
 
 interface RecipeGridProps {
   recipes?: RecipeWithStats[];

@@ -2,17 +2,22 @@ import React, { useState, useEffect } from "react";
 import RecipeGrid from "../recipes/RecipeGrid";
 import { getSavedRecipes } from "@/lib/api";
 import { RecipeWithStats } from "@/types/supabase";
+import { useAuth } from "@/lib/AuthContext";
 
 const SavedRecipes = () => {
   const [recipes, setRecipes] = useState<RecipeWithStats[]>([]);
+
+const SavedRecipes = () => {
+  const { user } = useAuth();
+  const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!user) return;
+
     const fetchSavedRecipes = async () => {
       try {
-        // For now, using a hardcoded user ID for demo
-        const userId = "demo-user";
-        const data = await getSavedRecipes(userId);
+        const data = await getSavedRecipes(user.id);
         setRecipes(data);
       } catch (error) {
         console.error("Error fetching saved recipes:", error);
@@ -22,7 +27,7 @@ const SavedRecipes = () => {
     };
 
     fetchSavedRecipes();
-  }, []);
+  }, [user]);
 
   if (loading) {
     return (

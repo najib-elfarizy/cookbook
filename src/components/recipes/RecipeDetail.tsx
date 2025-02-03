@@ -21,8 +21,33 @@ import { useAuth } from "@/lib/AuthContext";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase";
-
 import { RecipeWithDetails } from "@/types/supabase";
+
+interface Recipe {
+  id: string;
+  title: string;
+  description: string;
+  image_url: string;
+  prep_time: number;
+  cook_time: number;
+  servings: number;
+  difficulty: string;
+  author_id: string;
+  created_at: string;
+  instructions: Array<{
+    number: number;
+    instruction: string;
+    tip?: string;
+  }>;
+  user: {
+    id: string
+    email: string
+    raw_user_meta_data: { name?: string }
+  } | null;
+  likes: number;
+  saves: number;
+  comments: any[];
+}
 
 const RecipeDetail = () => {
   const navigate = useNavigate();
@@ -139,16 +164,16 @@ const RecipeDetail = () => {
                 <div className="flex items-center gap-3 mb-4">
                   <Avatar className="h-10 w-10 border-2 border-white">
                     <AvatarImage
-                      src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${recipe.user_id}`}
+                      src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${recipe.author_id}`}
                     />
                     <AvatarFallback>U</AvatarFallback>
                   </Avatar>
                   <div>
                     <p
                       className="text-sm font-medium hover:underline cursor-pointer"
-                      onClick={() => navigate(`/user/${recipe.user_id}`)}
+                      onClick={() => navigate(`/user/${recipe.author_id}`)}
                     >
-                      {recipe.user?.username || recipe.user_id.split("-")[0]}
+                      {recipe.user?.raw_user_meta_data.name || recipe.author_id.split("-")[0]}
                     </p>
                     <p className="text-sm text-white/80">
                       {new Date(recipe.created_at).toLocaleDateString()}

@@ -22,6 +22,7 @@ export async function getRecipesByCategory(categorySlug: string) {
       comments:recipe_comments(count)
     `,
     )
+    .order("created_at", { ascending: false })
     .eq("category.slug", categorySlug);
 
   if (error) throw error;
@@ -33,14 +34,19 @@ export async function getRecipesByCategory(categorySlug: string) {
   }));
 }
 
-export async function getAllRecipes() {
+export async function getAllRecipes(userId?: string) {
   const { data, error } = await supabase.from("recipes").select(`
       *,
       category:categories(*),
       likes:recipe_likes(count),
       saves:recipe_saves(count),
-      comments:recipe_comments(count)
-    `);
+      comments:recipe_comments(count),
+      user_liked:recipe_likes!left(user_id),
+      user_saved:recipe_saves!left(user_id)
+    `)
+    .eq("user_liked.user_id", userId || "00000000-0000-0000-0000-000000000000")
+    .eq("user_saved.user_id", userId || "00000000-0000-0000-0000-000000000000")
+    .order("created_at", { ascending: false });
 
   if (error) throw error;
   return data.map((recipe) => ({
@@ -61,7 +67,7 @@ export async function getRecipeById(id: string) {
       likes:recipe_likes(count),
       saves:recipe_saves(count),
       comments:recipe_comments(*),
-      user:profiles(*)
+      user:users!author_id (*)
     `,
     )
     .eq("id", id)
@@ -165,12 +171,15 @@ export async function getSavedRecipes(userId: string) {
       category:categories(*),
       likes:recipe_likes(count),
       saves:recipe_saves(count),
-      comments:recipe_comments(count)
+      comments:recipe_comments(count),
+      is_saved:recipe_saves!inner(user_id)
     `,
     )
-    .filter("recipe_saves.user_id", "eq", userId);
+    .order("created_at", { ascending: false })
+    .eq("is_saved.user_id", userId);
 
   if (error) throw error;
+  console.log(data);
   return data.map((recipe) => ({
     ...recipe,
     likes: recipe.likes[0].count || 0,
@@ -188,10 +197,12 @@ export async function getLikedRecipes(userId: string) {
       category:categories(*),
       likes:recipe_likes(count),
       saves:recipe_saves(count),
-      comments:recipe_comments(count)
+      comments:recipe_comments(count),
+      is_liked:recipe_likes!inner(user_id)
     `,
     )
-    .filter("recipe_likes.user_id", "eq", userId);
+    .order("created_at", { ascending: false })
+    .eq("is_liked.user_id", userId);
 
   if (error) throw error;
   return data.map((recipe) => ({
@@ -212,7 +223,7 @@ export async function createRecipe(recipe: {
   servings: number;
   difficulty: string;
   instructions: Array<{ number: number; instruction: string; tip?: string }>;
-  user_id: string;
+  author_id: string;
 }) {
   const { data, error } = await supabase
     .from("recipes")
