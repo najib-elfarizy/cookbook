@@ -16,6 +16,14 @@ interface Recipe {
   servings: number;
   difficulty: string;
   user_id: string;
+  category: {
+    id: string;
+    title: string;
+    slug: string;
+  };
+  user?: {
+    username: string;
+  };
   likes: number;
   saves: number;
   comments: number;

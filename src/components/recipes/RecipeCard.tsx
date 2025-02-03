@@ -35,6 +35,7 @@ interface RecipeCardProps {
   likes?: number;
   saves?: number;
   comments?: number;
+  isLiked?: boolean;
   isSaved?: boolean;
   user_id?: string;
   username?: string;
@@ -164,7 +165,6 @@ const RecipeCard = ({
               <Button
                 variant="ghost"
                 size="icon"
-                className="hover:text-red-500"
                 onClick={handleLike}
                 className={liked ? "text-red-500" : ""}
               >

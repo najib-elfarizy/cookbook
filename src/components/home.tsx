@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import SearchSection from "./recipes/SearchSection";
 import RecipeGrid from "./recipes/RecipeGrid";
 import { getAllRecipes } from "@/lib/api";
+import { useAuth } from "@/lib/AuthContext";
 
 interface Recipe {
   id: string;
@@ -12,10 +13,14 @@ interface Recipe {
   cook_time: number;
   servings: number;
   difficulty: string;
+  user_id: string;
   category: {
     id: string;
     title: string;
     slug: string;
+  };
+  user?: {
+    username: string;
   };
   likes: number;
   saves: number;
@@ -39,6 +44,7 @@ const Home = ({
     difficulty: "",
   },
 }: HomeProps) => {
+  const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [filters, setFilters] = useState(initialFilters);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -48,7 +54,7 @@ const Home = ({
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const data = await getAllRecipes();
+        const data = await getAllRecipes(user.id);
         setAllRecipes(data);
         setRecipes(data);
       } catch (error) {
