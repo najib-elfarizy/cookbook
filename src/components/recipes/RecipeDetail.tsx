@@ -147,7 +147,7 @@ const RecipeDetail = () => {
                       className="text-sm font-medium hover:underline cursor-pointer"
                       onClick={() => navigate(`/user/${recipe.author_id}`)}
                     >
-                      {recipe.user?.raw_user_meta_data.name || recipe.author_id.split("-")[0]}
+                      {recipe.user?.full_name || recipe.author_id.split("-")[0]}
                     </p>
                     <p className="text-sm text-white/80">
                       {new Date(recipe.created_at).toLocaleDateString()}

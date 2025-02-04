@@ -117,7 +117,7 @@ const Navbar = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <AuthModal />
+              <></>
             )}
 
             <DropdownMenu>

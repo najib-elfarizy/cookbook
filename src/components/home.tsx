@@ -32,7 +32,7 @@ const Home = ({
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const data = await getAllRecipes(user.id);
+        const data = await getAllRecipes(user?.id);
         setAllRecipes(data);
         setRecipes(data);
       } catch (error) {
@@ -130,7 +130,7 @@ const Home = ({
           onSearch={handleSearch}
           onFilterChange={handleFilterChange}
         />
-        <div className="flex-1">
+        <div className="flex-1 px-4">
           <RecipeGrid recipes={recipes} />
         </div>
       </main>

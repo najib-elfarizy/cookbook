@@ -13,6 +13,9 @@ import {
 import { AuthModal } from "@/components/auth/AuthModal";
 import CommentsModal from "./CommentsModal";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import {
   Heart,
   MessageCircle,
@@ -21,23 +24,11 @@ import {
   Clock,
   Users,
   ChefHat,
+  Calendar,
 } from "lucide-react";
 import { toggleRecipeLike, toggleRecipeSave } from "@/lib/api";
-import { Recipe } from "@/types";
-
-interface RecipeCardProps extends Partial<Recipe> {
-  prepTime?: string;
-  cookTime?: string;
-  servings?: number;
-  difficulty?: string;
-  likes?: number;
-  saves?: number;
-  comments?: number;
-  isLiked?: boolean;
-  isSaved?: boolean;
-  username?: string;
-  image?: string;
-}
+import { format } from "date-fns";
+import { RecipeCardProps } from "@/types";
 
 const RecipeCard = ({
   id = "1",
@@ -60,13 +51,15 @@ const RecipeCard = ({
   const [saved, setSaved] = useState(isSaved);
   const [likesCount, setLikesCount] = useState(likes);
   const [savesCount, setSavesCount] = useState(saves);
-
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [commentsOpen, setCommentsOpen] = useState(false);
+  const [scheduledDate, setScheduledDate] = useState<Date>();
+  const [customName, setCustomName] = useState("");
   const { user } = useAuth();
 
   const handleLike = async (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent navigation when clicking save
+    e.stopPropagation(); // Prevent navigation when clicking like
     if (!user) {
       setDialogOpen(true);
       return;
@@ -80,18 +73,33 @@ const RecipeCard = ({
     }
   };
 
-  const handleSave = async (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent navigation when clicking save
+  const handleSaveClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (!user) {
       setDialogOpen(true);
       return;
     }
+    setSaveDialogOpen(true);
+  };
+
+  const handleSave = async () => {
     try {
-      const isSaved = await toggleRecipeSave(id, user.id);
+      const isSaved = await toggleRecipeSave(
+        id,
+        user.id,
+        scheduledDate
+          ? format(scheduledDate, "yyyy-MM-dd'T'HH:mm:ssxxx")
+          : undefined,
+        customName || undefined,
+      );
       setSaved(isSaved);
       setSavesCount((prev) => (isSaved ? prev + 1 : prev - 1));
     } catch (error) {
       console.error("Error toggling save:", error);
+    } finally {
+      setSaveDialogOpen(false);
+      setScheduledDate(undefined);
+      setCustomName("");
     }
   };
 
@@ -108,6 +116,53 @@ const RecipeCard = ({
           <AuthModal mode="sign-in" onSuccess={() => setDialogOpen(false)} />
         </DialogContent>
       </Dialog>
+
+      <Dialog open={saveDialogOpen} onOpenChange={setSaveDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Save Recipe</DialogTitle>
+            <DialogDescription>
+              Schedule when you want to cook this recipe
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Custom Name (Optional)</Label>
+              <Input
+                placeholder="E.g. Sunday Dinner"
+                value={customName}
+                onChange={(e) => setCustomName(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Schedule Date (Optional)</Label>
+              <CalendarComponent
+                mode="single"
+                selected={scheduledDate}
+                onSelect={setScheduledDate}
+                className="rounded-md border"
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setSaveDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSave}>Save Recipe</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <CommentsModal
+        open={commentsOpen}
+        onOpenChange={setCommentsOpen}
+        recipeId={id}
+        recipeTitle={title}
+      />
+
       <Card
         className="group cursor-pointer overflow-hidden"
         onClick={() => navigate(`/recipe/${id}`)}
@@ -190,7 +245,7 @@ const RecipeCard = ({
             <Button
               variant="ghost"
               size="icon"
-              onClick={handleSave}
+              onClick={handleSaveClick}
               className={saved ? "text-blue-500" : ""}
             >
               <BookmarkPlus
@@ -202,13 +257,6 @@ const RecipeCard = ({
           </div>
         </CardContent>
       </Card>
-
-      <CommentsModal
-        open={commentsOpen}
-        onOpenChange={setCommentsOpen}
-        recipeId={id}
-        recipeTitle={title}
-      />
     </>
   );
 };

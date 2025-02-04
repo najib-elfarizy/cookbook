@@ -72,7 +72,7 @@ export async function getRecipeById(id: string) {
       likes:recipe_likes(count),
       saves:recipe_saves(count),
       comments:recipe_comments(*),
-      user:users!author_id (*)
+      user:profiles!author_id (*)
     `,
     )
     .eq("id", id)
@@ -114,7 +114,12 @@ export async function toggleRecipeLike(recipeId: string, userId: string) {
   }
 }
 
-export async function toggleRecipeSave(recipeId: string, userId: string) {
+export async function toggleRecipeSave(
+  recipeId: string,
+  userId: string,
+  scheduledDate?: string,
+  customName?: string,
+) {
   const { data: existingSave } = await supabase
     .from("recipe_saves")
     .select()
@@ -132,9 +137,14 @@ export async function toggleRecipeSave(recipeId: string, userId: string) {
     if (error) throw error;
     return false;
   } else {
-    const { error } = await supabase
-      .from("recipe_saves")
-      .insert([{ recipe_id: recipeId, user_id: userId }]);
+    const { error } = await supabase.from("recipe_saves").insert([
+      {
+        recipe_id: recipeId,
+        user_id: userId,
+        scheduled_date: scheduledDate,
+        custom_name: customName,
+      },
+    ]);
 
     if (error) throw error;
     return true;
@@ -177,19 +187,20 @@ export async function getSavedRecipes(userId: string) {
       likes:recipe_likes(count),
       saves:recipe_saves(count),
       comments:recipe_comments(count),
-      is_saved:recipe_saves!inner(user_id)
+      recipe_saves!inner(scheduled_date, custom_name)
     `,
     )
-    .order("created_at", { ascending: false })
-    .eq("is_saved.user_id", userId);
+    .eq("recipe_saves.user_id", userId);
+  // .order("recipe_saves.scheduled_date", { ascending: true });
 
   if (error) throw error;
-  console.log(data);
   return data.map((recipe) => ({
     ...recipe,
     likes: recipe.likes[0].count || 0,
     saves: recipe.saves[0].count || 0,
     comments: recipe.comments[0].count || 0,
+    scheduled_date: recipe.recipe_saves[0]?.scheduled_date,
+    custom_name: recipe.recipe_saves[0]?.custom_name,
   }));
 }
 

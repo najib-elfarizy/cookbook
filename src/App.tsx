@@ -1,6 +1,8 @@
-import { Suspense } from "react";
+import { Suspense, lazy } from "react";
 import { Routes, Route, BrowserRouter, useRoutes } from "react-router-dom";
-import Home from "./components/home";
+import RequireAuth from "./components/RequireAuth";
+const Home = lazy(() => import("./components/home"));
+const AuthPage = lazy(() => import("./pages/auth"));
 import CategoriesGrid from "./components/categories/CategoriesGrid";
 import CategoryPage from "./components/categories/CategoryPage";
 import RecipeDetail from "./components/recipes/RecipeDetail";
@@ -31,11 +33,40 @@ function App() {
               <Route path="/categories" element={<CategoriesGrid />} />
               <Route path="/category/:slug" element={<CategoryPage />} />
               <Route path="/recipe/:recipeId" element={<RecipeDetail />} />
-              <Route path="/create" element={<CreateRecipe />} />
-              <Route path="/saved" element={<SavedRecipes />} />
-              <Route path="/profile" element={<UserProfile />} />
+              <Route path="/auth" element={<AuthPage />} />
+              <Route
+                path="/create"
+                element={
+                  <RequireAuth>
+                    <CreateRecipe />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/saved"
+                element={
+                  <RequireAuth>
+                    <SavedRecipes />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <RequireAuth>
+                    <UserProfile />
+                  </RequireAuth>
+                }
+              />
               <Route path="/user/:userId" element={<UserDetailPage />} />
-              <Route path="/settings" element={<SettingsPage />} />
+              <Route
+                path="/settings"
+                element={
+                  <RequireAuth>
+                    <SettingsPage />
+                  </RequireAuth>
+                }
+              />
               {import.meta.env.VITE_TEMPO === "true" && (
                 <Route path="/tempobook/*" element={<TempoRoutes />} />
               )}

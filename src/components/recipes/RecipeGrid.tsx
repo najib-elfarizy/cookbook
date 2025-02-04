@@ -16,7 +16,7 @@ const RecipeGrid = ({ recipes = [] }: RecipeGridProps) => {
   }
 
   return (
-    <div className="w-full min-h-[842px] bg-gray-50 p-6">
+    <div className="w-full min-h-[842px] py-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-[1200px] mx-auto">
         {recipes.map((recipe) => (
           <RecipeCard
