@@ -1,3 +1,11 @@
+export interface Category {
+  id: string
+  slug: string
+  title: string
+  description: string | null
+  image_url: string | null
+}
+
 export interface Recipe {
   id: string;
   title: string;
@@ -7,77 +15,62 @@ export interface Recipe {
   cook_time: number;
   servings: number;
   difficulty: string;
-  user_id: string;
+  author_id: string;
+  category_id: string;
+  created_at: string;
+  instructions: Array<{
+    number: number;
+    instruction: string;
+    tip?: string;
+  }>;
   category: {
-    id: string;
-    title: string;
-    slug: string;
+    slug: 'N/A'
   };
-  user?: {
-    username: string;
-  };
+  user: {
+    id: string
+    email: string
+    raw_user_meta_data: { name?: string }
+  } | null;
+  comments: number;
   likes: number;
   saves: number;
-  comments: number;
 }
 
-export interface HomeProps {
-  initialSearchTerm?: string;
-  initialFilters?: {
-    cuisine: string;
-    time: string;
-    difficulty: string;
-  };
-}
-
-export interface SearchSectionProps {
-  onSearch?: (searchTerm: string) => void;
-  onFilterChange?: (filterType: string, value: string) => void;
-  searchTerm?: string;
-  selectedCuisine?: string;
-  selectedTime?: string;
-  selectedDifficulty?: string;
-}
-
-export interface RecipeGridProps {
-  recipes?: Recipe[];
-}
-
-export interface RecipeCardProps extends Partial<Recipe> {
-  prepTime?: string;
-  cookTime?: string;
-  servings?: number;
-  difficulty?: string;
-  likes?: number;
-  saves?: number;
-  comments?: number;
-  isLiked?: boolean;
-  isSaved?: boolean;
-  username?: string;
-}
-
-export interface CategoryCardProps {
+export interface RecipeDetail {
   id: string;
   title: string;
+  description: string;
   image_url: string;
-  slug: string;
+  prep_time: number;
+  cook_time: number;
+  servings: number;
+  difficulty: string;
+  author_id: string;
+  created_at: string;
+  instructions: Array<{
+    number: number;
+    instruction: string;
+    tip?: string;
+  }>;
+  category: {
+    slug: 'N/A'
+  },
+  user: {
+    id: string
+    email: string
+    raw_user_meta_data: { name?: string }
+  } | null;
+  likes: number;
+  saves: number;
+  comments: any[];
 }
 
-export interface CommentsModalProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  recipeId: string;
-  recipeTitle: string;
-}
-
-export interface AuthModalProps {
-  trigger?: React.ReactNode;
-  mode?: "sign-in" | "sign-up";
-  onSuccess?: () => void;
-}
-
-export interface LayoutProps {
-  children: React.ReactNode;
+export interface RecipeComment {
+  id: string
+  recipe_id: string | null
+  user_id: string | null
+  created_at: string
+  content: string
 }
 
 export interface CreateRecipeForm {

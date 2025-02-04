@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { RecipeWithStats } from "@/types/supabase";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/AuthContext";
 import { AuthModal } from "@/components/auth/AuthModal";
@@ -11,14 +10,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Settings, Heart, BookmarkCheck, LogOut } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import RecipeGrid from "../recipes/RecipeGrid";
+import { Recipe } from "@/types";
 
 const UserProfile = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
-  const [recipes, setRecipes] = useState<RecipeWithStats[]>([]);
-  const [savedRecipes, setSavedRecipes] = useState<RecipeWithStats[]>([]);
-  const [likedRecipes, setLikedRecipes] = useState<RecipeWithStats[]>([]);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [savedRecipes, setSavedRecipes] = useState<Recipe[]>([]);
+  const [likedRecipes, setLikedRecipes] = useState<Recipe[]>([]);
 
   useEffect(() => {
     if (!user) return;

@@ -21,33 +21,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase";
-import { RecipeWithDetails } from "@/types/supabase";
-
-interface Recipe {
-  id: string;
-  title: string;
-  description: string;
-  image_url: string;
-  prep_time: number;
-  cook_time: number;
-  servings: number;
-  difficulty: string;
-  author_id: string;
-  created_at: string;
-  instructions: Array<{
-    number: number;
-    instruction: string;
-    tip?: string;
-  }>;
-  user: {
-    id: string
-    email: string
-    raw_user_meta_data: { name?: string }
-  } | null;
-  likes: number;
-  saves: number;
-  comments: any[];
-}
+import { RecipeDetail as Recipe } from "@/types";
 
 const RecipeDetail = () => {
   const navigate = useNavigate();

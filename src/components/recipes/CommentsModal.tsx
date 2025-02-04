@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { RecipeComment } from "@/types/supabase";
 import {
   Dialog,
   DialogContent,
@@ -14,6 +13,7 @@ import { AuthModal } from "@/components/auth/AuthModal";
 import { useToast } from "@/components/ui/use-toast";
 import { addComment, getRecipeComments } from "@/lib/api";
 import { useNavigate } from "react-router-dom";
+import { RecipeComment } from "@/types";
 
 interface CommentsModalProps {
   open: boolean;

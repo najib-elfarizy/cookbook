@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import RecipeGrid from "../recipes/RecipeGrid";
 import { getSavedRecipes } from "@/lib/api";
-import { RecipeWithStats } from "@/types/supabase";
 import { useAuth } from "@/lib/AuthContext";
 
 const SavedRecipes = () => {

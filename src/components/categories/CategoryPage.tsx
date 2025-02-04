@@ -4,8 +4,7 @@ import SearchSection from "../recipes/SearchSection";
 import RecipeGrid from "../recipes/RecipeGrid";
 import { useEffect, useState } from "react";
 import { getRecipesByCategory } from "@/lib/api";
-
-import { RecipeWithStats } from "@/types/supabase";
+import { Recipe } from "@/types";
 
 const CategoryPage = () => {
   const { slug } = useParams();

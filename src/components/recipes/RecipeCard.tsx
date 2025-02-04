@@ -23,9 +23,9 @@ import {
   ChefHat,
 } from "lucide-react";
 import { toggleRecipeLike, toggleRecipeSave } from "@/lib/api";
-import { RecipeWithStats } from "@/types/supabase";
+import { Recipe } from "@/types";
 
-interface RecipeCardProps extends Partial<RecipeWithStats> {
+interface RecipeCardProps extends Partial<Recipe> {
   prepTime?: string;
   cookTime?: string;
   servings?: number;
@@ -36,6 +36,7 @@ interface RecipeCardProps extends Partial<RecipeWithStats> {
   isLiked?: boolean;
   isSaved?: boolean;
   username?: string;
+  image?: string;
 }
 
 const RecipeCard = ({
@@ -51,7 +52,7 @@ const RecipeCard = ({
   comments = 0,
   isLiked = false,
   isSaved = false,
-  user_id = "default",
+  author_id = "default",
   username = "Chef",
 }: RecipeCardProps) => {
   const navigate = useNavigate();
@@ -139,12 +140,12 @@ const RecipeCard = ({
                     className="flex items-center gap-2 mb-2"
                     onClick={(e) => {
                       e.stopPropagation();
-                      navigate(`/user/${user_id}`);
+                      navigate(`/user/${author_id}`);
                     }}
                   >
                     <Avatar className="flex flex-col h-8 w-8 border-2 border-white">
                       <AvatarImage
-                        src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user_id}`}
+                        src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${author_id}`}
                       />
                       <AvatarFallback>{username[0]}</AvatarFallback>
                     </Avatar>

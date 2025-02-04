@@ -1,32 +1,9 @@
 import React from "react";
 import RecipeCard from "./RecipeCard";
-import { RecipeWithStats } from "@/types/supabase";
-        
-interface Recipe {
-  id: string;
-  title: string;
-  description: string;
-  image_url: string;
-  prep_time: number;
-  cook_time: number;
-  servings: number;
-  difficulty: string;
-  user_id: string;
-  category: {
-    id: string;
-    title: string;
-    slug: string;
-  };
-  user?: {
-    username: string;
-  };
-  likes: number;
-  saves: number;
-  comments: number;
-}
+import { Recipe } from "@/types";
 
 interface RecipeGridProps {
-  recipes?: RecipeWithStats[];
+  recipes?: Recipe[];
 }
 
 const RecipeGrid = ({ recipes = [] }: RecipeGridProps) => {
@@ -54,10 +31,10 @@ const RecipeGrid = ({ recipes = [] }: RecipeGridProps) => {
             likes={recipe.likes}
             saves={recipe.saves}
             comments={recipe.comments}
-            user_id={recipe.user_id || "default"}
+            author_id={recipe.author_id || "default"}
             username={
-              recipe.user?.username ||
-              (recipe.user_id ? recipe.user_id.split("-")[0] : "Anonymous")
+              recipe.user?.raw_user_meta_data?.name ||
+              (recipe.author_id ? recipe.author_id.split("-")[0] : "Anonymous")
             }
           />
         ))}

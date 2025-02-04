@@ -3,8 +3,7 @@ import CategoryCard from "./CategoryCard";
 
 import { useEffect, useState } from "react";
 import { getCategories } from "@/lib/api";
-
-import { Category } from "@/types/supabase";
+import { Category } from "@/types";
 
 const CategoriesGrid = () => {
   const [categories, setCategories] = useState<Category[]>([]);

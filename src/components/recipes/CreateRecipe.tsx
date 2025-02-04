@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Recipe } from "@/types/supabase";
 import { useAuth } from "@/lib/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -18,6 +17,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { getCurrentUser } from "@/lib/auth";
 import { createRecipe } from "@/lib/api";
+import { Recipe } from "@/types";
 
 const CreateRecipe = () => {
   const { user } = useAuth();
@@ -26,17 +26,7 @@ const CreateRecipe = () => {
   const [loading, setLoading] = useState(false);
   type CreateRecipeForm = Omit<Recipe, "id" | "created_at">;
 
-  const [formData, setFormData] = useState<CreateRecipeForm>({
-    title: "",
-    description: "",
-    image_url: "",
-    category_id: "",
-    prep_time: "",
-    cook_time: "",
-    servings: "",
-    difficulty: "",
-    instructions: [{ number: 1, instruction: "", tip: "" }],
-  });
+  const [formData, setFormData] = useState<CreateRecipeForm>();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,10 +45,10 @@ const CreateRecipe = () => {
 
       const recipe = await createRecipe({
         ...formData,
-        user_id: user.id,
-        prep_time: parseInt(formData.prep_time),
-        cook_time: parseInt(formData.cook_time),
-        servings: parseInt(formData.servings),
+        author_id: user.id,
+        prep_time: formData.prep_time,
+        cook_time: formData.cook_time,
+        servings: formData.servings,
       });
 
       toast({
@@ -212,7 +202,7 @@ const CreateRecipe = () => {
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
-                        prep_time: e.target.value,
+                        prep_time: parseInt(e.target.value),
                       }))
                     }
                     required
@@ -229,7 +219,7 @@ const CreateRecipe = () => {
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
-                        cook_time: e.target.value,
+                        cook_time: parseInt(e.target.value),
                       }))
                     }
                     required
@@ -246,7 +236,7 @@ const CreateRecipe = () => {
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
-                        servings: e.target.value,
+                        servings: parseInt(e.target.value),
                       }))
                     }
                     required
