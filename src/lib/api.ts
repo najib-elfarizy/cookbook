@@ -35,7 +35,7 @@ export async function getRecipesByCategory(categorySlug: string) {
 }
 
 export async function getAllRecipes(userId?: string) {
-  const { data, error } = await supabase.from("recipes").select(`
+  let query = supabase.from("recipes").select(`
       *,
       category:categories(*),
       likes:recipe_likes(count),
@@ -43,10 +43,15 @@ export async function getAllRecipes(userId?: string) {
       comments:recipe_comments(count),
       user_liked:recipe_likes!left(user_id),
       user_saved:recipe_saves!left(user_id)
-    `)
-    .eq("user_liked.user_id", userId || "00000000-0000-0000-0000-000000000000")
-    .eq("user_saved.user_id", userId || "00000000-0000-0000-0000-000000000000")
-    .order("created_at", { ascending: false });
+    `);
+
+  if (userId) {
+    query = query
+      .eq("user_liked.user_id", userId)
+      .eq("user_saved.user_id", userId);
+  }
+
+  const { data, error } = await query.order("created_at", { ascending: false });
 
   if (error) throw error;
   return data.map((recipe) => ({
