@@ -128,7 +128,7 @@ const CommentsModal = ({
                       className="font-medium hover:underline cursor-pointer"
                       onClick={() => navigate(`/user/${comment.user_id}`)}
                     >
-                      {comment.user_id.split("-")[0]}
+                      {comment.user?.full_name}
                     </p>
                     <p className="text-gray-600">{comment.content}</p>
                     <p className="text-sm text-gray-400 mt-1">

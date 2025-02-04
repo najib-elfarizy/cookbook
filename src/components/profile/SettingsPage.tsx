@@ -10,6 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { supabase } from "@/lib/supabase";
+import { fetchProfile } from "@/lib/api";
 
 const SettingsPage = () => {
   const navigate = useNavigate();
@@ -31,15 +32,9 @@ const SettingsPage = () => {
       return;
     }
 
-    const fetchProfile = async () => {
+    const getProfile = async () => {
       try {
-        const { data, error } = await supabase
-          .from("profiles")
-          .select("*")
-          .eq("id", user.id)
-          .single();
-
-        if (error) throw error;
+        const data = await fetchProfile(user.id)
         setProfile(data);
       } catch (error: any) {
         toast({
@@ -50,7 +45,7 @@ const SettingsPage = () => {
       }
     };
 
-    fetchProfile();
+    getProfile();
   }, [user, navigate, toast]);
 
   const handleUpdateProfile = async (e: React.FormEvent) => {

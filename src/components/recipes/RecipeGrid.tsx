@@ -19,24 +19,7 @@ const RecipeGrid = ({ recipes = [] }: RecipeGridProps) => {
     <div className="w-full min-h-[842px] py-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-[1200px] mx-auto">
         {recipes.map((recipe) => (
-          <RecipeCard
-            key={recipe.id}
-            id={recipe.id}
-            title={recipe.title}
-            image={recipe.image_url}
-            prepTime={`${recipe.prep_time} mins`}
-            cookTime={`${recipe.cook_time} mins`}
-            servings={recipe.servings}
-            difficulty={recipe.difficulty}
-            likes={recipe.likes}
-            saves={recipe.saves}
-            comments={recipe.comments}
-            author_id={recipe.author_id || "default"}
-            username={
-              recipe.user?.raw_user_meta_data?.name ||
-              (recipe.author_id ? recipe.author_id.split("-")[0] : "Anonymous")
-            }
-          />
+          <RecipeCard key={recipe.id} recipe={recipe} />
         ))}
       </div>
     </div>

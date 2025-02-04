@@ -16,7 +16,7 @@ import {
   Printer,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { getRecipeById, toggleRecipeSave, addComment } from "@/lib/api";
+import { findRecipeById, toggleRecipeSave, addComment } from "@/lib/api";
 import { useAuth } from "@/lib/AuthContext";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { useToast } from "@/components/ui/use-toast";
@@ -37,7 +37,7 @@ const RecipeDetail = () => {
     const fetchRecipe = async () => {
       if (!recipeId) return;
       try {
-        const data = await getRecipeById(recipeId);
+        const data = await findRecipeById(recipeId, user?.id);
         if (!data) {
           console.error("No recipe found with id:", recipeId);
           return;
@@ -205,9 +205,9 @@ const RecipeDetail = () => {
                       setRecipe((prev) =>
                         prev
                           ? {
-                              ...prev,
-                              saves: isSaved ? prev.saves + 1 : prev.saves - 1,
-                            }
+                            ...prev,
+                            saves: isSaved ? prev.saves + 1 : prev.saves - 1,
+                          }
                           : null,
                       );
                     } catch (error) {

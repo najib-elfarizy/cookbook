@@ -1,3 +1,13 @@
+export interface Profile {
+  name: string
+  full_name: string
+  avatar: string
+  bio: string
+  recipes: number
+  followers: number
+  followings: number
+}
+
 export interface Category {
   id: string
   slug: string
@@ -29,11 +39,13 @@ export interface Recipe {
   user: {
     id: string
     email: string
-    raw_user_meta_data: { name?: string }
+    full_name: string
   } | null;
   comments: number;
   likes: number;
+  is_liked: boolean;
   saves: number;
+  is_saved: boolean;
 }
 
 export interface RecipeDetail {
@@ -58,7 +70,7 @@ export interface RecipeDetail {
   user: {
     id: string
     email: string
-    raw_user_meta_data: { name?: string }
+    full_name: string
   } | null;
   likes: number;
   saves: number;
@@ -71,6 +83,11 @@ export interface RecipeComment {
   user_id: string | null
   created_at: string
   content: string
+  user: {
+    id: string
+    email: string
+    full_name: string
+  } | null;
 }
 
 export interface CreateRecipeForm {

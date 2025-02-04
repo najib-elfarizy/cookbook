@@ -57,6 +57,42 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          location: string | null
+          updated_at: string
+          username: string | null
+          website: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          location?: string | null
+          updated_at?: string
+          username?: string | null
+          website?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          location?: string | null
+          updated_at?: string
+          username?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
       recipe_comments: {
         Row: {
           content: string
@@ -88,10 +124,10 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "recipe_comments_user_id_fkey"
+            foreignKeyName: "recipe_comments_user_id_fkey1"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -172,7 +208,7 @@ export type Database = {
             foreignKeyName: "recipe_likes_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -180,20 +216,26 @@ export type Database = {
       recipe_saves: {
         Row: {
           created_at: string
+          custom_name: string | null
           id: string
           recipe_id: string | null
+          scheduled_date: string | null
           user_id: string | null
         }
         Insert: {
           created_at?: string
+          custom_name?: string | null
           id?: string
           recipe_id?: string | null
+          scheduled_date?: string | null
           user_id?: string | null
         }
         Update: {
           created_at?: string
+          custom_name?: string | null
           id?: string
           recipe_id?: string | null
+          scheduled_date?: string | null
           user_id?: string | null
         }
         Relationships: [
@@ -208,7 +250,7 @@ export type Database = {
             foreignKeyName: "recipe_saves_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -261,10 +303,10 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "recipes_author_id_fkey"
+            foreignKeyName: "recipes_author_id_fkey1"
             columns: ["author_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -278,24 +320,7 @@ export type Database = {
       }
     }
     Views: {
-      users: {
-        Row: {
-          email: string | null
-          id: string | null
-          raw_user_meta_data: Json | null
-        }
-        Insert: {
-          email?: string | null
-          id?: string | null
-          raw_user_meta_data?: Json | null
-        }
-        Update: {
-          email?: string | null
-          id?: string | null
-          raw_user_meta_data?: Json | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       [_ in never]: never

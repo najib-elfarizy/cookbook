@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/AuthContext";
 import { AuthModal } from "@/components/auth/AuthModal";
-import { getAllRecipes, getSavedRecipes, getLikedRecipes } from "@/lib/api";
+import { getAllRecipes, getSavedRecipes, getLikedRecipes, getUserRecipes, fetchProfile } from "@/lib/api";
 import { signOut } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,12 +10,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Settings, Heart, BookmarkCheck, LogOut } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import RecipeGrid from "../recipes/RecipeGrid";
-import { Recipe } from "@/types";
+import { Profile, Recipe } from "@/types";
 
 const UserProfile = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
+  const [profile, setProfile] = useState<Profile>();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [savedRecipes, setSavedRecipes] = useState<Recipe[]>([]);
   const [likedRecipes, setLikedRecipes] = useState<Recipe[]>([]);
@@ -23,13 +24,18 @@ const UserProfile = () => {
   useEffect(() => {
     if (!user) return;
 
-    // Fetch user's recipes
-    getAllRecipes().then((allRecipes) => {
-      const userRecipes = allRecipes.filter(
-        (recipe) => recipe.author_id === user.id,
-      );
-      setRecipes(userRecipes);
+    fetchProfile(user.id).then((user) => {
+      setProfile(user);
+    }).catch((error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
     });
+
+    // Fetch user recipes
+    getUserRecipes(user.id).then(setRecipes);
 
     // Fetch saved recipes
     getSavedRecipes(user.id).then(setSavedRecipes);
@@ -63,16 +69,6 @@ const UserProfile = () => {
     );
   }
 
-  const userData = {
-    name: user.email?.split("@")[0] || "User",
-    username: user.email?.split("@")[0] || "user",
-    avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.id}`,
-    bio: "Food enthusiast and home chef. Love trying new recipes!",
-    recipesCount: recipes.length,
-    followersCount: 0,
-    followingCount: 0,
-  };
-
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto px-4 py-8">
@@ -81,13 +77,13 @@ const UserProfile = () => {
             <div className="flex items-start justify-between mb-6">
               <div className="flex items-center gap-4">
                 <img
-                  src={userData.avatar}
-                  alt={userData.name}
+                  src={profile.avatar ?? `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.id}`}
+                  alt={profile.name}
                   className="w-20 h-20 rounded-full"
                 />
                 <div>
-                  <h1 className="text-2xl font-bold">{userData.name}</h1>
-                  <p className="text-muted-foreground">@{userData.username}</p>
+                  <h1 className="text-2xl font-bold">{profile.name}</h1>
+                  <p className="text-muted-foreground">@{profile.full_name}</p>
                 </div>
               </div>
               <div className="flex gap-2">
@@ -109,19 +105,19 @@ const UserProfile = () => {
               </div>
             </div>
 
-            <p className="text-gray-600 mb-6">{userData.bio}</p>
+            <p className="text-gray-600 mb-6">{profile.bio}</p>
 
             <div className="flex gap-6 mb-8">
               <div className="text-center">
-                <p className="font-semibold">{userData.recipesCount}</p>
+                <p className="font-semibold">{profile.recipes}</p>
                 <p className="text-sm text-muted-foreground">Recipes</p>
               </div>
               <div className="text-center">
-                <p className="font-semibold">{userData.followersCount}</p>
+                <p className="font-semibold">{profile.followers}</p>
                 <p className="text-sm text-muted-foreground">Followers</p>
               </div>
               <div className="text-center">
-                <p className="font-semibold">{userData.followingCount}</p>
+                <p className="font-semibold">{profile.followings}</p>
                 <p className="text-sm text-muted-foreground">Following</p>
               </div>
             </div>
