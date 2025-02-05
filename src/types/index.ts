@@ -1,19 +1,23 @@
 export interface Profile {
-  name: string
-  full_name: string
-  avatar: string
-  bio: string
-  recipes: number
-  followers: number
-  followings: number
+  id: string;
+  username: string;
+  full_name: string;
+  avatar_url: string;
+  bio: string;
+  website: string;
+  location: string;
+  recipes: number;
+  followers: number;
+  following: number;
+  is_following?: boolean;
 }
 
 export interface Category {
-  id: string
-  slug: string
-  title: string
-  description: string | null
-  image_url: string | null
+  id: string;
+  slug: string;
+  title: string;
+  description: string | null;
+  image_url: string | null;
 }
 
 export interface Recipe {
@@ -34,12 +38,12 @@ export interface Recipe {
     tip?: string;
   }>;
   category: {
-    slug: 'N/A'
+    slug: "N/A";
   };
   user: {
-    id: string
-    email: string
-    full_name: string
+    id: string;
+    email: string;
+    full_name: string;
   } | null;
   comments: number;
   likes: number;
@@ -65,12 +69,12 @@ export interface RecipeDetail {
     tip?: string;
   }>;
   category: {
-    slug: 'N/A'
-  },
+    slug: "N/A";
+  };
   user: {
-    id: string
-    email: string
-    full_name: string
+    id: string;
+    email: string;
+    full_name: string;
   } | null;
   likes: number;
   saves: number;
@@ -78,15 +82,15 @@ export interface RecipeDetail {
 }
 
 export interface RecipeComment {
-  id: string
-  recipe_id: string | null
-  user_id: string | null
-  created_at: string
-  content: string
+  id: string;
+  recipe_id: string | null;
+  user_id: string | null;
+  created_at: string;
+  content: string;
   user: {
-    id: string
-    email: string
-    full_name: string
+    id: string;
+    email: string;
+    full_name: string;
   } | null;
 }
 

@@ -112,7 +112,7 @@ const CreateRecipe = () => {
                 <Label htmlFor="title">Recipe Title</Label>
                 <Input
                   id="title"
-                  value={formData.title}
+                  value={formData?.title}
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, title: e.target.value }))
                   }
@@ -124,7 +124,7 @@ const CreateRecipe = () => {
                 <Label htmlFor="description">Description</Label>
                 <Textarea
                   id="description"
-                  value={formData.description}
+                  value={formData?.description}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -140,7 +140,7 @@ const CreateRecipe = () => {
                 <Input
                   id="image_url"
                   type="url"
-                  value={formData.image_url}
+                  value={formData?.image_url}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -155,7 +155,7 @@ const CreateRecipe = () => {
                 <div className="space-y-2">
                   <Label htmlFor="category">Category</Label>
                   <Select
-                    value={formData.category_id}
+                    value={formData?.category_id}
                     onValueChange={(value) =>
                       setFormData((prev) => ({ ...prev, category_id: value }))
                     }
@@ -174,7 +174,7 @@ const CreateRecipe = () => {
                 <div className="space-y-2">
                   <Label htmlFor="difficulty">Difficulty</Label>
                   <Select
-                    value={formData.difficulty}
+                    value={formData?.difficulty}
                     onValueChange={(value) =>
                       setFormData((prev) => ({ ...prev, difficulty: value }))
                     }
@@ -198,7 +198,7 @@ const CreateRecipe = () => {
                     id="prep_time"
                     type="number"
                     min="0"
-                    value={formData.prep_time}
+                    value={formData?.prep_time}
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
@@ -215,7 +215,7 @@ const CreateRecipe = () => {
                     id="cook_time"
                     type="number"
                     min="0"
-                    value={formData.cook_time}
+                    value={formData?.cook_time}
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
@@ -232,7 +232,7 @@ const CreateRecipe = () => {
                     id="servings"
                     type="number"
                     min="1"
-                    value={formData.servings}
+                    value={formData?.servings}
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
@@ -256,7 +256,7 @@ const CreateRecipe = () => {
                   </Button>
                 </div>
 
-                {formData.instructions.map((step, index) => (
+                {formData?.instructions.map((step, index) => (
                   <div key={step.number} className="space-y-2">
                     <Label>Step {step.number}</Label>
                     <Textarea
