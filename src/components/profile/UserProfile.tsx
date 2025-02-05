@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/AuthContext";
 import { AuthModal } from "@/components/auth/AuthModal";
 import {
-  getAllRecipes,
   getSavedRecipes,
   getLikedRecipes,
   getUserRecipes,
@@ -75,7 +74,7 @@ const UserProfile = () => {
     getUserRecipes(user.id).then(setRecipes);
 
     // Fetch saved recipes
-    getSavedRecipes(user.id).then(setSavedRecipes);
+    getSavedRecipes(user.id).then((setSavedRecipes));
 
     // Fetch liked recipes
     getLikedRecipes(user.id).then(setLikedRecipes);
@@ -177,12 +176,6 @@ const UserProfile = () => {
                 <TabsTrigger value="recipes" className="flex-1">
                   My Recipes
                 </TabsTrigger>
-                <TabsTrigger value="followers" className="flex-1">
-                  Followers
-                </TabsTrigger>
-                <TabsTrigger value="following" className="flex-1">
-                  Following
-                </TabsTrigger>
                 <TabsTrigger value="liked" className="flex-1">
                   <Heart className="h-4 w-4 mr-2" />
                   Liked
@@ -194,108 +187,6 @@ const UserProfile = () => {
               </TabsList>
               <TabsContent value="recipes">
                 <RecipeGrid recipes={recipes} />
-              </TabsContent>
-              <TabsContent value="followers">
-                <div className="py-4">
-                  {profile?.followers > 0 ? (
-                    <div className="space-y-4">
-                      {followers?.map((user) => (
-                        <div
-                          key={user.id}
-                          className="flex items-center justify-between p-4 bg-card rounded-lg border"
-                        >
-                          <div className="flex items-center gap-3">
-                            <Avatar>
-                              <AvatarImage
-                                src={
-                                  user.avatar_url ??
-                                  `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.id}`
-                                }
-                              />
-                              <AvatarFallback>
-                                {user.full_name?.[0]}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div>
-                              <p className="font-medium">{user.full_name}</p>
-                              <p className="text-sm text-muted-foreground">
-                                @{user.username}
-                              </p>
-                            </div>
-                          </div>
-                          <FollowButton
-                            userId={user.id}
-                            isFollowing={user.is_following}
-                            onFollowChange={(isFollowing) => {
-                              setFollowers((prev) =>
-                                prev.map((u) =>
-                                  u.id === user.id
-                                    ? { ...u, is_following: isFollowing }
-                                    : u,
-                                ),
-                              );
-                            }}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-8 text-muted-foreground">
-                      No followers yet
-                    </div>
-                  )}
-                </div>
-              </TabsContent>
-              <TabsContent value="following">
-                <div className="py-4">
-                  {profile?.following > 0 ? (
-                    <div className="space-y-4">
-                      {followingUsers?.map((user) => (
-                        <div
-                          key={user.id}
-                          className="flex items-center justify-between p-4 bg-card rounded-lg border"
-                        >
-                          <div className="flex items-center gap-3">
-                            <Avatar>
-                              <AvatarImage
-                                src={
-                                  user.avatar_url ??
-                                  `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.id}`
-                                }
-                              />
-                              <AvatarFallback>
-                                {user.full_name?.[0]}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div>
-                              <p className="font-medium">{user.full_name}</p>
-                              <p className="text-sm text-muted-foreground">
-                                @{user.username}
-                              </p>
-                            </div>
-                          </div>
-                          <FollowButton
-                            userId={user.id}
-                            isFollowing={user.is_following}
-                            onFollowChange={(isFollowing) => {
-                              setFollowingUsers((prev) =>
-                                prev.map((u) =>
-                                  u.id === user.id
-                                    ? { ...u, is_following: isFollowing }
-                                    : u,
-                                ),
-                              );
-                            }}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-8 text-muted-foreground">
-                      Not following anyone yet
-                    </div>
-                  )}
-                </div>
               </TabsContent>
               <TabsContent value="liked">
                 <RecipeGrid recipes={likedRecipes} />

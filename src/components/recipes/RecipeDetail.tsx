@@ -16,26 +16,28 @@ import {
   Printer,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { findRecipeById, toggleRecipeSave, addComment } from "@/lib/api";
+import { findRecipeById, toggleRecipeSave, addComment, getRecipeComments } from "@/lib/api";
 import { useAuth } from "@/lib/AuthContext";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase";
-import { RecipeDetail as Recipe } from "@/types";
+import { RecipeDetail as Recipe, RecipeComment } from "@/types";
 
 const RecipeDetail = () => {
   const navigate = useNavigate();
   const { recipeId } = useParams();
   const { user } = useAuth();
   const { toast } = useToast();
-  const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState(true);
   const [newComment, setNewComment] = useState("");
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const [comments, setComments] = useState<RecipeComment[]>([]);
 
   useEffect(() => {
     const fetchRecipe = async () => {
       if (!recipeId) return;
+
       try {
         const data = await findRecipeById(recipeId, user?.id);
         if (!data) {
@@ -43,6 +45,8 @@ const RecipeDetail = () => {
           return;
         }
         setRecipe(data);
+
+        getRecipeComments(recipeId).then(setComments);
 
         // Subscribe to comments
         const subscription = supabase
@@ -56,11 +60,11 @@ const RecipeDetail = () => {
               filter: `recipe_id=eq.${recipeId}`,
             },
             (payload) => {
-              setRecipe((prev) => {
+              setComments((prev) => {
                 if (!prev) return null;
                 return {
                   ...prev,
-                  comments: [payload.new, ...prev.comments],
+                  comments: [payload.new, ...prev],
                 };
               });
             },
@@ -307,7 +311,7 @@ const RecipeDetail = () => {
                   </div>
                 </div>
 
-                {recipe.comments.map((comment) => (
+                {comments.map((comment) => (
                   <div key={comment.id} className="flex gap-4">
                     <Avatar>
                       <AvatarImage
@@ -320,7 +324,7 @@ const RecipeDetail = () => {
                         className="font-medium hover:underline cursor-pointer"
                         onClick={() => navigate(`/user/${comment.user_id}`)}
                       >
-                        {comment.user_id.split("-")[0]}
+                        {comment.user?.full_name}
                       </p>
                       <p className="text-gray-600">{comment.content}</p>
                       <p className="text-sm text-gray-400 mt-1">

@@ -31,8 +31,8 @@ const CommentsModal = ({
   const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
-  const [comments, setComments] = useState<RecipeComment[]>([]);
   const [newComment, setNewComment] = useState("");
+  const [comments, setComments] = useState<RecipeComment[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {

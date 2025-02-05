@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import RecipeGrid from "../recipes/RecipeGrid";
-import { fetchProfile, getUserRecipes } from "@/lib/api";
+import { fetchProfile, getFollowers, getFollowing, getUserRecipes } from "@/lib/api";
 import { Profile, Recipe } from "@/types";
 import { toast } from "../ui/use-toast";
 import FollowButton from "./FollowButton";
@@ -19,12 +19,17 @@ const UserDetailPage = () => {
   const [profile, setProfile] = useState<Profile>();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [followers, setFollowers] = useState([]);
-  const [showFollowers, setShowFollowers] = useState(false);
   const [followingUsers, setFollowingUsers] = useState([]);
-  const [showFollowings, setShowFollowings] = useState(false);
   const [activeTab, setActiveTab] = useState("recipes");
 
   useEffect(() => {
+    const loadRecipes = async () => {
+      if (activeTab === "recipes") {
+        const followers = await getUserRecipes(userId);
+        setRecipes(followers);
+      }
+    };
+
     const loadFollowers = async () => {
       if (activeTab === "followers") {
         const followers = await getFollowers(userId);
@@ -39,6 +44,7 @@ const UserDetailPage = () => {
       }
     };
 
+    loadRecipes();
     loadFollowers();
     loadFollowing();
   }, [userId, activeTab]);
@@ -49,18 +55,6 @@ const UserDetailPage = () => {
     fetchProfile(userId, user?.id)
       .then((data) => {
         setProfile(data);
-      })
-      .catch((error) => {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      });
-
-    getUserRecipes(userId)
-      .then((data) => {
-        setRecipes(data);
       })
       .catch((error) => {
         toast({
@@ -108,10 +102,10 @@ const UserDetailPage = () => {
                     setProfile((prev) =>
                       prev
                         ? {
-                            ...prev,
-                            is_following: isFollowing,
-                            followers: prev.followers + (isFollowing ? 1 : -1),
-                          }
+                          ...prev,
+                          is_following: isFollowing,
+                          followers: prev.followers + (isFollowing ? 1 : -1),
+                        }
                         : prev,
                     )
                   }
@@ -127,22 +121,18 @@ const UserDetailPage = () => {
                 <p className="text-sm text-muted-foreground">Recipes</p>
               </div>
               <div
-                className="text-center cursor-pointer hover:opacity-75"
-                onClick={() => setShowFollowers(true)}
-              >
+                className="text-center">
                 <p className="font-semibold">{profile?.followers || 0}</p>
                 <p className="text-sm text-muted-foreground">Followers</p>
               </div>
               <div
-                className="text-center cursor-pointer hover:opacity-75"
-                onClick={() => setShowFollowings(true)}
-              >
+                className="text-center">
                 <p className="font-semibold">{profile?.following || 0}</p>
                 <p className="text-sm text-muted-foreground">Following</p>
               </div>
             </div>
 
-            <Tabs defaultValue="recipes" className="w-full">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="w-full">
                 <TabsTrigger value="recipes" className="flex-1">
                   Recipes
@@ -262,19 +252,6 @@ const UserDetailPage = () => {
             </Tabs>
           </CardContent>
         </Card>
-
-        <FollowList
-          userId={userId}
-          type="followers"
-          open={showFollowers}
-          onOpenChange={setShowFollowers}
-        />
-        <FollowList
-          userId={userId}
-          type="following"
-          open={showFollowings}
-          onOpenChange={setShowFollowings}
-        />
       </div>
     </div>
   );
