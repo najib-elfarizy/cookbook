@@ -27,9 +27,7 @@ const UserProfile = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [profile, setProfile] = useState<Profile>();
-  const [followers, setFollowers] = useState([]);
   const [showFollowers, setShowFollowers] = useState(false);
-  const [followingUsers, setFollowingUsers] = useState([]);
   const [showFollowings, setShowFollowings] = useState(false);
   const [activeTab, setActiveTab] = useState("recipes");
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -37,22 +35,22 @@ const UserProfile = () => {
   const [likedRecipes, setLikedRecipes] = useState<Recipe[]>([]);
 
   useEffect(() => {
-    const loadFollowers = async () => {
-      if (activeTab === "followers" && user) {
-        const followers = await getFollowers(user.id);
-        setFollowers(followers);
+    const loadRecipes = async () => {
+      if (activeTab === "recipes" && user) {
+        const recipes = await getUserRecipes(user.id);
+        setRecipes(recipes);
+      }
+      if (activeTab === "liked" && user) {
+        const recipes = await getLikedRecipes(user.id);
+        setLikedRecipes(recipes);
+      }
+      if (activeTab === "saved" && user) {
+        const recipes = await getSavedRecipes(user.id);
+        setSavedRecipes(recipes);
       }
     };
 
-    const loadFollowing = async () => {
-      if (activeTab === "following" && user) {
-        const following = await getFollowing(user.id);
-        setFollowingUsers(following);
-      }
-    };
-
-    loadFollowers();
-    loadFollowing();
+    loadRecipes();
   }, [user?.id, activeTab]);
 
   useEffect(() => {
@@ -69,15 +67,6 @@ const UserProfile = () => {
           variant: "destructive",
         });
       });
-
-    // Fetch user recipes
-    getUserRecipes(user.id).then(setRecipes);
-
-    // Fetch saved recipes
-    getSavedRecipes(user.id).then((setSavedRecipes));
-
-    // Fetch liked recipes
-    getLikedRecipes(user.id).then(setLikedRecipes);
   }, [user]);
 
   const handleLogout = async () => {
@@ -168,7 +157,7 @@ const UserProfile = () => {
             </div>
 
             <Tabs
-              defaultValue="recipes"
+              value={activeTab}
               className="w-full"
               onValueChange={setActiveTab}
             >

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart } from "lucide-react";
@@ -13,8 +13,9 @@ import FollowList from "./FollowList";
 import { useAuth } from "@/lib/AuthContext";
 
 const UserDetailPage = () => {
-  const { userId } = useParams();
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const { userId } = useParams();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<Profile>();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -156,7 +157,9 @@ const UserDetailPage = () => {
                           key={user.id}
                           className="flex items-center justify-between p-4 bg-card rounded-lg border"
                         >
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center cursor-pointer gap-3"
+                            onClick={() => navigate(`/user/${user.id}`)}
+                          >
                             <Avatar>
                               <AvatarImage
                                 src={
@@ -207,7 +210,9 @@ const UserDetailPage = () => {
                           key={user.id}
                           className="flex items-center justify-between p-4 bg-card rounded-lg border"
                         >
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center cursor-pointer gap-3"
+                            onClick={() => navigate(`/user/${user.id}`)}
+                          >
                             <Avatar>
                               <AvatarImage
                                 src={
